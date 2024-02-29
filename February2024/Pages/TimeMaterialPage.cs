@@ -1,4 +1,5 @@
 ﻿using February2024.Utilities;
+using NUnit.Framework;
 using OpenQA.Selenium;
 
 namespace February2024.Pages
@@ -47,14 +48,16 @@ namespace February2024.Pages
             goToLastpageButton.Click();
 
             IWebElement newRecordCode = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[1]"));
-            if (newRecordCode.Text == "February2024")
-            {
-                Console.WriteLine("New Material/Time Record has been created successfully");
-            }
-            else
-            {
-                Console.WriteLine("New Material/Time Record has not been created :( :( :(");
-            }
+            //if (newRecordCode.Text == "February2024")
+            //{
+            //    Assert.Pass("New Material/Time Record has been created successfully");
+            //}
+            //else
+            //{
+            //    Assert.Fail("New Material/Time Record has not been created :( :( :(");
+            //}
+
+            Assert.That((newRecordCode.Text == "February2024"), "New Material/Time Record has not been created");
         }
 
         public void EditTimeMaterialRecord(IWebDriver driver) 
@@ -80,7 +83,8 @@ namespace February2024.Pages
             editDescriptionTextBox.SendKeys("IC2023Edited");
 
             //Edit Price in Price Textbox
-            IWebElement editPriceOverlappingTag = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[4]/div/span[1]/span/input[1]"));
+            WaitUtils.WaitToBeVisible(driver, "XPath", "//*[@id='TimeMaterialEditForm']/div/div[4]/div/span[1]/span/input[1]", 3);
+            IWebElement editPriceOverlappingTag = driver.FindElement(By.XPath("//*[@id='TimeMaterialEditForm']/div/div[4]/div/span[1]/span/input[1]"));
             IWebElement editPriceTextBox = driver.FindElement(By.Id("Price"));
             editPriceOverlappingTag.Click();
             editPriceTextBox.Clear();
@@ -90,7 +94,7 @@ namespace February2024.Pages
             //Click on save button
             IWebElement editSaveButton = driver.FindElement(By.Id("SaveButton"));
             editSaveButton.Click();
-            Thread.Sleep(7000);
+            Thread.Sleep(4000);
 
             // Clock on goToLastPage Button
             IWebElement editGoToLastPageButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
@@ -99,14 +103,15 @@ namespace February2024.Pages
             IWebElement editedCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
             IWebElement EditedDescription = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[3]"));
 
-            if (editedCode.Text == "IC2023Edited" && EditedDescription.Text == "IC2023Edited")
-            {
-                Console.WriteLine("Time Record has been updated successfully");
-            }
-            else
-            {
-                Console.WriteLine("Time Record has not been updated");
-            }
+            //if (editedCode.Text == "IC2023Edited" && EditedDescription.Text == "IC2023Edited")
+            //{
+            //    Console.WriteLine("Time Record has been updated successfully");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Time Record has not been updated");
+            //}
+            Assert.That((editedCode.Text == "IC2023Edited"), "Time Record has not been updated");
         }
 
         public void DeleteTimeMaterialRecord(IWebDriver driver) 
@@ -124,14 +129,7 @@ namespace February2024.Pages
             simpleAlert.Accept();
 
             IWebElement lastCodeInTable = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
-            if (lastCodeInTable.Text == "IC2023Edited")
-            {
-                Console.WriteLine("Time Record has not been deleted");
-            }
-            else
-            {
-                Console.WriteLine("Time Record has been deleted successfully");
-            }
+            Assert.That((lastCodeInTable.Text.Equals("IC2023Edited")), "Time Record has not been deleted");
         }
 
     }
